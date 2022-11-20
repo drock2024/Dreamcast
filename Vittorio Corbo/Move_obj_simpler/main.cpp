@@ -17,12 +17,9 @@ const int blkWidth=32;	//Block width
 const int blkHeight=32;	//Block height
 const int waitTime=2000;	//Delay before checking for user input (microseconds)
 
-void drawBlk(int x, int y,int width, int height, int red, int green, int blue, int redIncAmnt, int greenIncAmnt, int blueIncAmnt) //Draw a coloured block
-{
-	for(int yPos = 0; yPos<height; yPos++)
-	{
-		for(int xPos = 0; xPos <width; xPos++)
-		{
+void drawBlk(int x, int y,int width, int height, int red, int green, int blue, int redIncAmnt, int greenIncAmnt, int blueIncAmnt){ //Draw a coloured block
+	for(int yPos = 0; yPos<height; yPos++){
+		for(int xPos = 0; xPos <width; xPos++){
 			vram_s[(x + xPos) + ((y * scrnWidth) + (yPos * scrnWidth))] = ((red & 0x1F) << 10) | ((green & 0x1F) << 5) | (blue & 0x1F);
 			red+=redIncAmnt;
 			green+=greenIncAmnt;
@@ -33,14 +30,13 @@ void drawBlk(int x, int y,int width, int height, int red, int green, int blue, i
 	}
 }
 
-void moveBlk(int xOld, int yOld, int xNew, int yNew,int width, int height, int red, int green, int blue, int redIncAmnt, int greenIncAmnt, int blueIncAmnt)	//Remove block from old position and draw in new position
-{ 
+void moveBlk(int xOld, int yOld, int xNew, int yNew,int width, int height, int red, int green, int blue, int redIncAmnt, int greenIncAmnt, int blueIncAmnt){ 	//Remove block from old position and draw in new position
 	drawBlk(xOld,yOld,blkWidth,blkHeight,0,0,0,0,0,0); //Remove block from current position
 	drawBlk(xNew,yNew,blkWidth,blkHeight,red,green,blue,redIncAmnt,greenIncAmnt,blueIncAmnt); 	//Draw green block at current position
 }
 
-void checkForInpUpd(int& blk_xPos, int& blk_yPos)	//Check for input from user and update block position if needed
-{
+void checkForInpUpd(int& blk_xPos, int& blk_yPos){	//Check for input from user and update block position if needed
+
 	//Get input from any controller
 		MAPLE_FOREACH_BEGIN(MAPLE_FUNC_CONTROLLER,	//Type of device
 							cont_state_t,	//Device status cast to type (controller status)
@@ -52,22 +48,19 @@ void checkForInpUpd(int& blk_xPos, int& blk_yPos)	//Check for input from user an
 					moveBlk(blk_xPos,blk_yPos,blk_xPos,blk_yPos-1,blkWidth,blkHeight,0,0,0,0,1,0);	//Remove block from old position and draw in new position
 					blk_yPos--;
 				}
-			}
-			else {
+			}else {
 				if(st->buttons & CONT_DPAD_DOWN) {	//D-pad down pressed
 					if (blk_yPos + blkHeight < scrnHeight) {
 						moveBlk(blk_xPos,blk_yPos,blk_xPos,blk_yPos+1,blkWidth,blkHeight,0,0,0,0,1,0);	//Remove block from old position and draw in new position
 						blk_yPos++;
 					}
-				}
-				else {
+				}else {
 					if(st->buttons & CONT_DPAD_LEFT) {	//D-pad left pressed
 						if (blk_xPos > 0) {
 							moveBlk(blk_xPos,blk_yPos,blk_xPos-1,blk_yPos,blkWidth,blkHeight,0,0,0,0,1,0);	//Remove block from old position and draw in new position
 							blk_xPos--;
 						}
-					}
-					else {
+					}else {
 						if(st->buttons & CONT_DPAD_RIGHT) {	//D-pad right pressed
 							if (blk_xPos + blkWidth < scrnWidth) {
 								moveBlk(blk_xPos,blk_yPos,blk_xPos+1,blk_yPos,blkWidth,blkHeight,0,0,0,0,1,0);	//Remove block from old position and draw in new position
