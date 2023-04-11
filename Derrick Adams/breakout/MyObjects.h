@@ -22,6 +22,7 @@ struct Paddle {
     GLfloat xpos, ypos;
     GLfloat width, height;
     GLfloat r, g, b;
+    GLfloat vel, maxVel;
 };
 
 // Brick

@@ -45,6 +45,7 @@ void Breakout::display(void) {
         case Gameplay:
             // Draw the game
             drawGame();
+            paddle.xpos += paddle.vel;
             // If no balls, player loses the game
             if (balls.size() <= 0 & lifesCount > 0) {
                 newBall(-1, -1);
@@ -151,10 +152,10 @@ void Breakout::newBall(float x = -1, float y = -1) {
         b1.ypos = y;
     }
     if ((float) rand() / (RAND_MAX) < 0.5)
-        b1.xvel = 5.0f;
+        b1.xvel = 4.0f;
     else
-        b1.xvel = -5.0f;
-    b1.yvel = -10.0f;
+        b1.xvel = -4.0f;
+    b1.yvel = -8.0f;
     b1.radius = BALL_RADIUS;
     b1.r = 0.4f + (float) rand() / (RAND_MAX);
     b1.g = 0.25f + (float) rand() / (RAND_MAX);
@@ -289,6 +290,8 @@ void Breakout::initPaddle(void) {
     paddle.height = 12.0f;
     paddle.xpos = WINWIDTH / 2.0f - paddle.width / 2.0f;
     paddle.ypos = WINHEIGHT - 20.0f;
+    paddle.vel = 0;
+    paddle.maxVel = 20;
 }
 
 void Breakout::drawPaddle() {
@@ -558,6 +561,7 @@ void Breakout::specialKeyPos(int key, int x, int y) {
             }
             break;
         default:
+            paddle.vel = 0;
             break;
     }
 }
